@@ -70,14 +70,14 @@ class FaceDetectionModel:
         # Get the input layer, iterate through the inputs here
         self.input_name = next(iter(self.network.inputs))
         # Return the shape of the input layer
-        self.input_shape self.network.inputs[self.input_name].shape
+        self.input_shape = self.network.inputs[self.input_name].shape
         # Get the output layer
-        self.output_names = netx(iter(self.network.outputs))
+        self.output_names = next(iter(self.network.outputs))
         # Return the shape of the output layer
         self.output_shape = self.network.outputs[self.output_names].shape
 
 
-    def predict(self, image):
+    def predict(self, image, prob_threshold):
         '''
         TODO: You will need to complete this method.
         This method is meant for running predictions on the input image.
@@ -115,11 +115,11 @@ class FaceDetectionModel:
         pass
 
     def preprocess_input(self, image):
-    '''
-    Before feeding the data into the model for inference,
-    you might have to preprocess it. This function is where you can do that.
-    Given an input image, height and width:
-    '''
+        '''
+        Before feeding the data into the model for inference,
+        you might have to preprocess it. This function is where you can do that.
+        Given an input image, height and width:
+        '''
         # - Resize to height and width, (H, W), but resize use W, H which is opposite order
         # print(self.input_shape)
         image_resized = cv2.resize(image, (self.input_shape[3], self.input.shape[2]))
@@ -132,11 +132,11 @@ class FaceDetectionModel:
         return img_processed
 
 
-    def preprocess_output(self, outputs):
-    '''
-    Before feeding the output of this model to the next model,
-    you might have to preprocess the output. This function is where you can do that.
-    '''
+    def preprocess_output(self, outputs, prob_threshold):
+        '''
+        Before feeding the output of this model to the next model,
+        you might have to preprocess the output. This function is where you can do that.
+        '''
         coords = []
         outs = outputs[self.output_names][0][0] # output 
         for out in outs:

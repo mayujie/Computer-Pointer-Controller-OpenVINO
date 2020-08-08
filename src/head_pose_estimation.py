@@ -54,7 +54,7 @@ class HeadPoseEstimationModel:
                 print("Give the path of cpu extension")
                 exit(1)
 
-        self.exec_net = self.plugin.load_network(network.self.network, device_name=self.device, num_requests=1)
+        self.exec_net = self.plugin.load_network(network=self.network, device_name=self.device, num_requests=1)
         
         self.input_name = next(iter(self.network.inputs))
         self.input_shape = self.network.inputs[self.input_name].shape
@@ -76,10 +76,10 @@ class HeadPoseEstimationModel:
         pass
 
     def preprocess_input(self, image):
-    '''
-    Before feeding the data into the model for inference,
-    you might have to preprocess it. This function is where you can do that.
-    '''
+        '''
+        Before feeding the data into the model for inference,
+        you might have to preprocess it. This function is where you can do that.
+        '''
         # we wanna opposite order from H, W 
         image_resized = cv2.resize(image, (self.input_shape[3], self,input_shape[2]))
         # (optional)
@@ -95,16 +95,19 @@ class HeadPoseEstimationModel:
         return img_processed
 
     def preprocess_output(self, outputs):
-    '''
-    Before feeding the output of this model to the next model,
-    you might have to preprocess the output. This function is where you can do that.
-    https://docs.openvinotoolkit.org/latest/omz_models_intel_head_pose_estimation_adas_0001_description_head_pose_estimation_adas_0001.html
-    Output layer names in Inference Engine format:
+        '''
+        Before feeding the output of this model to the next model,
+        you might have to preprocess the output. This function is where you can do that.
+        https://docs.openvinotoolkit.org/latest/omz_models_intel_head_pose_estimation_adas_0001_description_head_pose_estimation_adas_0001.html
+        Output layer names in Inference Engine format:
 
-    name: "angle_y_fc", shape: [1, 1] - Estimated yaw (in degrees).
-    name: "angle_p_fc", shape: [1, 1] - Estimated pitch (in degrees).
-    name: "angle_r_fc", shape: [1, 1] - Estimated roll (in degrees).    
-    '''
+        name: "angle_y_fc", shape: [1, 1] - Estimated yaw (in degrees).
+        name: "angle_p_fc", shape: [1, 1] - Estimated pitch (in degrees).
+        name: "angle_r_fc", shape: [1, 1] - Estimated roll (in degrees).    
+
+        z-axis is directed from person's eyes to the camera center
+        y-axis is vertical, and x-axis is orthogonal to both z,y axes so that (x,y,z) constitute a right-handed coordinate system.
+        '''
         outs = []
         outs.append(outputs['angle_y_fc'].tolist()[0][0])
         outs.append(outputs['angle_p_fc'].tolist()[0][0])
