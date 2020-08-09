@@ -1,0 +1,16 @@
+INFO:root:Model Load time: 1.3650002479553223
+INFO:root:Inference time: 28.14570927619934
+INFO:root:FPS: 2.095914742451155
+ERROR:root:VideoStream ended...
+INFO:root:Model Load time: 1.0358426570892334
+INFO:root:Inference time: 28.550910472869873
+INFO:root:FPS: 2.0665499124343256
+ERROR:root:VideoStream ended...
+INFO:root:Model Load time: 1.0294909477233887
+INFO:root:Inference time: 28.42668890953064
+INFO:root:FPS: 2.075272599366866
+ERROR:root:VideoStream ended...
+INFO:root:Model Load time: 1.616499900817871
+INFO:root:Inference time: 28.38741636276245
+INFO:root:FPS: 2.0781965480803097
+ERROR:root:VideoStream ended...

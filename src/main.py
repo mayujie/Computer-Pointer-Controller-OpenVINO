@@ -9,6 +9,7 @@ from gaze_estimation import GazeEstimationModel
 from mouse_controller import MouseController
 from argparse import ArgumentParser
 from input_feeder import InputFeeder
+import time
 
 
 def build_argparser():
@@ -58,6 +59,7 @@ def main():
 	args = build_argparser().parse_args()
 	previewFlags = args.previewFlags
 
+	logging.basicConfig(filename='Project_log.log', level=logging.INFO)
 	logger = logging.getLogger()
 	inputFilePath = args.input
 	inputFeeder = None
@@ -85,18 +87,27 @@ def main():
 	mc = MouseController('medium', 'fast')
 
 	inputFeeder.load_data()
+
+	start_time = time.time()
 	fdm.load_model()
+	# fdm_load_time = time.time()
 	fldm.load_model()
+	# fldm_load_time = time.time()
 	hpem.load_model()
+	# hpem_load_time = time.time()
 	gem.load_model()
+	# gem_load_time = time.time()
+	total_load_time = time.time() - start_time
 
 	frame_count = 0
+	start_infer_time = time.time()
+
 	for ret, frame in inputFeeder.next_batch():
 		if not ret:
 			break
 		frame_count+=1
 		if frame_count %5 == 0:
-			cv2.imshow('video', cv2.resize(frame, (500,500)))
+			cv2.imshow('video', cv2.resize(frame, (900,700)))
 
 		key = cv2.waitKey(60)
 		# face detection model
@@ -118,19 +129,19 @@ def main():
 		new_mouse_coord, gaze_vector = gem.predict(left_eye, right_eye, hp_out)
 
 		if (not len(previewFlags)==0):
-			previewFlags = frame.copy()
+			preview_frame = frame.copy()
 
 			if 'fd' in previewFlags:
 				# cv2.rectangle(preview_frame, (face_coords[0], face_coords[1]), (face_coords[2], face_coords[3]), (255,0,0), 3) 
 				preview_frame = croppedFace
 
 			if 'fld' in previewFlags:
-				cv2.rectangle(croppedFace, (eye_coords[0][0]-10, eye_coords[0][1]-10), (eye_coords[0][2]+10, eye_coords[0][3]+10), (0,255,0), 3)
-				cv2.rectangle(croppedFace, (eye_coords[1][0]-10, eye_coords[1][1]-10), (eye_coords[1][2]+10, eye_coords[1][3]+10), (0,255,0), 3)
+				cv2.rectangle(croppedFace, (eye_coords[0][0]-30, eye_coords[0][1]-30), (eye_coords[0][2]+30, eye_coords[0][3]+30), (255,255,255), 2)
+				cv2.rectangle(croppedFace, (eye_coords[1][0]-30, eye_coords[1][1]-30), (eye_coords[1][2]+30, eye_coords[1][3]+30), (255,255,255), 2)
                 # preview_frame[face_coords[1]:face_coords[3], face_coords[0]:face_coords[2]] = croppedFace
 
 			if 'hp' in previewFlags:
-				cv2.putText(preview_frame, "Pose Angles: yaw:{:.2f} | pitch:{:.2f} | roll:{:.2f}".format(hp_out[0],hp_out[1],hp_out[2]), (10, 20), cv2.FONT_HERSHEY_COMPLEX, 0.25, (0, 255, 0), 1)
+				cv2.putText(preview_frame, "Pose Angles:  yaw: {:.2f} | pitch: {:.2f} | roll: {:.2f}".format(hp_out[0],hp_out[1],hp_out[2]), (10, 20), cv2.FONT_HERSHEY_DUPLEX, 0.25, (0, 255, 255), 1)
 			
 			if 'ge' in previewFlags:
 				x, y, w = int(gaze_vector[0]*12), int(gaze_vector[1]*12), 160
@@ -142,13 +153,25 @@ def main():
 				croppedFace[eye_coords[1][1]:eye_coords[1][3],eye_coords[1][0]:eye_coords[1][2]] = re
                 # preview_frame[face_coords[1]:face_coords[3], face_coords[0]:face_coords[2]] = croppedFace
 
-			cv2.imshow("visualization",cv2.resize(preview_frame,(500,500)))
+			cv2.imshow("visualization",cv2.resize(preview_frame,(600,600)))
 
 		if frame_count%5==0:
 			mc.move(new_mouse_coord[0], new_mouse_coord[1])
 
 		if key==27:
 			break
+
+	total_infer_time = time.time() - start_infer_time
+	fps = frame_count / round(total_infer_time, 2)
+
+
+	# logger.info('FaceDetectionModel load time: ' + str(fdm_load_time))
+	# logger.info('FacialLandmarkDetectionModel load time: ' + str(fldm_load_time))
+	# logger.info('HeadPoseEstimationModel load time: ' + str(hpem_load_time))
+	# logger.info('GazeEstimationModel load time: ' + str(gem_load_time))
+	logger.info('Model Load time: ' + str(total_load_time))
+	logger.info('Inference time: ' + str(total_infer_time))
+	logger.info('FPS: ' + str(fps))
 
 	logger.error("VideoStream ended...")
 	cv2.destroyAllWindows()

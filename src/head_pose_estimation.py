@@ -67,7 +67,7 @@ class HeadPoseEstimationModel:
         This method is meant for running predictions on the input image.
         '''
         img_processed = self.preprocess_input(image.copy())
-        outputs = self.exec_net({self.input_name:img_processed})
+        outputs = self.exec_net.infer({self.input_name:img_processed})
         lastOutput = self.preprocess_output(outputs)
 
         return lastOutput
@@ -81,7 +81,7 @@ class HeadPoseEstimationModel:
         you might have to preprocess it. This function is where you can do that.
         '''
         # we wanna opposite order from H, W 
-        image_resized = cv2.resize(image, (self.input_shape[3], self,input_shape[2]))
+        image_resized = cv2.resize(image, (self.input_shape[3], self.input_shape[2]))
         # (optional)
         # img_processed = np.transpose(np.expand_dims(image_resized, axis=0), (0, 3, 1, 2))
         

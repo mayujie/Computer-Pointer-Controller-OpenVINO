@@ -87,7 +87,8 @@ class FaceDetectionModel:
         # 2.Starts synchronous inference for the first infer request of the executable network and returns output data.
         # A dictionary that maps output layer names
         outputs = self.exec_net.infer({self.input_name:img_processed})
-        print(outputs)
+        # print(outputs)
+
         # 3. process the outputs
         coords = self.preprocess_output(outputs, prob_threshold)
         # if coords empty, return 0,0
@@ -97,15 +98,15 @@ class FaceDetectionModel:
         coords = coords[0]
         h=image.shape[0]
         w=image.shape[1]
-        print(coords)
+        # print(coords)
 
         coords = coords* np.array([w, h, w, h])
         # Copy of the array, cast to a specified type. int32
         coords = coords.astype(np.int32)
-        print(coords)
+        # print(coords)
 
         cropped_face = image[coords[1]:coords[3], coords[0]:coords[2]]
-        print(cropped_face)
+        # print(cropped_face.shape)
 
         return cropped_face, coords
 
@@ -122,7 +123,7 @@ class FaceDetectionModel:
         '''
         # - Resize to height and width, (H, W), but resize use W, H which is opposite order
         # print(self.input_shape)
-        image_resized = cv2.resize(image, (self.input_shape[3], self.input.shape[2]))
+        image_resized = cv2.resize(image, (self.input_shape[3], self.input_shape[2]))
         # print(image_resized)
         # - Transpose the final "channel" dimension to be first to BGR
         # - Reshape the image to add a "batch" of 1 at the start
