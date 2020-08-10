@@ -14,3 +14,29 @@ INFO:root:Model Load time: 1.616499900817871
 INFO:root:Inference time: 28.38741636276245
 INFO:root:FPS: 2.0781965480803097
 ERROR:root:VideoStream ended...
+ERROR:root:Unable to detect the face.
+ERROR:root:Unable to detect the face.
+INFO:root:Model Load time: 1.3345434665679932
+INFO:root:Inference time: 20.2422878742218
+INFO:root:FPS: 0.691699604743083
+ERROR:root:VideoStream ended...
+INFO:root:Model Load time: 1.4301807880401611
+INFO:root:Inference time: 27.815059900283813
+INFO:root:FPS: 2.12077641984184
+ERROR:root:VideoStream ended...
+INFO:root:Model Load time: 1.2041051387786865
+INFO:root:Inference time: 2.994135618209839
+INFO:root:FPS: 2.341137123745819
+ERROR:root:VideoStream ended...
+INFO:root:Model Load time: 1.014500379562378
+INFO:root:Inference time: 27.922627449035645
+INFO:root:FPS: 2.113180515759312
+ERROR:root:VideoStream ended...
+INFO:root:Model Load time: 0.9559900760650635
+INFO:root:Inference time: 27.895241737365723
+INFO:root:FPS: 2.1146953405017923
+ERROR:root:VideoStream ended...
+INFO:root:Model Load time: 1.3229994773864746
+INFO:root:Inference time: 27.82180690765381
+INFO:root:FPS: 2.12077641984184
+ERROR:root:VideoStream ended...
