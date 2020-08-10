@@ -1,5 +1,5 @@
 # Computer Pointer Controller
-_______________
+
 ## Introduction
 Computer Pointer Controller is an application which use a gaze detection model to control the mouse pointer of you computer.
 The position of mouse pointer will change by following the user's Gaze. The [Gaze Estimation](https://docs.openvinotoolkit.org/latest/_models_intel_gaze_estimation_adas_0002_description_gaze_estimation_adas_0002.html) model is used to estimate the gaze of the user's eyes and then feed the result into `pyautogui` module to change the position of mouse pointer. 
@@ -17,11 +17,13 @@ Recorded video of running the project: [Demo video of project](https://youtu.be/
 _______________
 **1.Prerequisites** 
 - [Install Intel® Distribution of OpenVINO™ toolkit for Windows* 10](https://docs.openvinotoolkit.org/latest/openvino_docs_install_guides_installing_openvino_windows.html#model_optimizer_configuration_steps) or you can choose install in Linux system.
-- The `requirments.txt` in project directory needs to be installed. Using command: `pip3 install -r requirements.txt`
+- The `requirments.txt` in project directory needs to be installed. Using command: 
+    - `pip3 install -r requirements.txt`
 
 **2.Environment setup**
 Initialize openVINO environment (command in cmd)
-**Important!!!**
+
+**!!!Important!!!**
 ```sh
 cd C:\Program Files (x86)\IntelSWTools\openvino\bin\ && setupvars.bat
 ```
