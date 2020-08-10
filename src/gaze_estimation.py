@@ -7,7 +7,7 @@ import numpy as np
 from openvino.inference_engine import IECore
 import math
 
-class GazeEstimationModel:
+class GazeEstimation:
     '''
     Class for the Face Detection Model.
     '''
@@ -66,8 +66,9 @@ class GazeEstimationModel:
         TODO: You will need to complete this method.
         This method is meant for running predictions on the input image.
         '''
-        le_img_processed, re_img_processed = self.preprocess_input(left_eye_image.copy(), right_eye_image.copy())
-        outputs = self.exec_net.infer({'head_pose_angles':hpa, 'left_eye_image':le_img_processed, 'right_eye_image':re_img_processed})
+        leye_img_processed, reye_img_processed = self.preprocess_input(left_eye_image.copy(), right_eye_image.copy())
+        outputs = self.exec_net.infer({'head_pose_angles':hpa, 'left_eye_image':leye_img_processed, 'right_eye_image':reye_img_processed})
+
         new_mouse_coord, gaze_vector = self.preprocess_output(outputs,hpa)
 
         return new_mouse_coord, gaze_vector
@@ -81,12 +82,22 @@ class GazeEstimationModel:
         Before feeding the data into the model for inference,
         you might have to preprocess it. This function is where you can do that.
         '''
-        le_image_resized = cv2.resize(left_eye, (self.input_shape[3], self.input_shape[2]))
-        re_image_resized = cv2.resize(right_eye, (self.input_shape[3], self.input_shape[2]))
-        le_img_processed = np.transpose(np.expand_dims(le_image_resized,axis=0), (0,3,1,2))
-        re_img_processed = np.transpose(np.expand_dims(re_image_resized,axis=0), (0,3,1,2))
+        # leye_image_resized = cv2.resize(left_eye, (self.input_shape[3], self.input_shape[2]))
+        # reye_image_resized = cv2.resize(right_eye, (self.input_shape[3], self.input_shape[2]))
+
+        leye_image_resized = cv2.resize(left_eye, (60,60))
+        reye_image_resized = cv2.resize(right_eye, (60,60))
+
+        left_eye_final = leye_image_resized.transpose((2,0,1))
+        right_eye_final = reye_image_resized.transpose((2,0,1))
+
+        left_eye_final = left_eye_final.reshape(1, *left_eye_final.shape)
+        right_eye_final = right_eye_final.reshape(1, *right_eye_final.shape)
+        # (optional)
+        # left_eye_final = np.transpose(np.expand_dims(leye_image_resized,axis=0), (0,3,1,2))
+        # right_eye_final = np.transpose(np.expand_dims(reye_image_resized,axis=0), (0,3,1,2))
         
-        return le_img_processed, re_img_processed
+        return left_eye_final, right_eye_final
 
 
     def preprocess_output(self, outputs, hpa):
@@ -100,11 +111,12 @@ class GazeEstimationModel:
         
         gaze_vector = outputs[self.output_names[0]].tolist()[0]
         #gaze_vector = gaze_vector / cv2.norm(gaze_vector)
-        rollValue = hpa[2] #angle_r_fc output from HeadPoseEstimation model
-        cosValue = math.cos(rollValue * math.pi / 180.0)
-        sinValue = math.sin(rollValue * math.pi / 180.0)
+        roll_value = hpa[2] #angle_r_fc output from HeadPoseEstimation model
 
-        newx = gaze_vector[0] * cosValue + gaze_vector[1] * sinValue
-        newy = -gaze_vector[0] *  sinValue+ gaze_vector[1] * cosValue
+        cos_value = math.cos(roll_value * math.pi / 180.0)
+        sin_value = math.sin(roll_value * math.pi / 180.0)
 
-        return (newx,newy), gaze_vector
+        new_x = gaze_vector[0] * cos_value + gaze_vector[1] * sin_value
+        new_y = gaze_vector[1] * cos_value - gaze_vector[0] *  sin_value
+
+        return (new_x,new_y), gaze_vector

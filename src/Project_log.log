@@ -1,42 +1,250 @@
-INFO:root:Model Load time: 1.3650002479553223
-INFO:root:Inference time: 28.14570927619934
-INFO:root:FPS: 2.095914742451155
-ERROR:root:VideoStream ended...
-INFO:root:Model Load time: 1.0358426570892334
-INFO:root:Inference time: 28.550910472869873
-INFO:root:FPS: 2.0665499124343256
-ERROR:root:VideoStream ended...
-INFO:root:Model Load time: 1.0294909477233887
-INFO:root:Inference time: 28.42668890953064
-INFO:root:FPS: 2.075272599366866
-ERROR:root:VideoStream ended...
-INFO:root:Model Load time: 1.616499900817871
-INFO:root:Inference time: 28.38741636276245
-INFO:root:FPS: 2.0781965480803097
-ERROR:root:VideoStream ended...
-ERROR:root:Unable to detect the face.
-ERROR:root:Unable to detect the face.
-INFO:root:Model Load time: 1.3345434665679932
-INFO:root:Inference time: 20.2422878742218
-INFO:root:FPS: 0.691699604743083
-ERROR:root:VideoStream ended...
-INFO:root:Model Load time: 1.4301807880401611
-INFO:root:Inference time: 27.815059900283813
-INFO:root:FPS: 2.12077641984184
-ERROR:root:VideoStream ended...
-INFO:root:Model Load time: 1.2041051387786865
-INFO:root:Inference time: 2.994135618209839
-INFO:root:FPS: 2.341137123745819
-ERROR:root:VideoStream ended...
-INFO:root:Model Load time: 1.014500379562378
-INFO:root:Inference time: 27.922627449035645
-INFO:root:FPS: 2.113180515759312
-ERROR:root:VideoStream ended...
-INFO:root:Model Load time: 0.9559900760650635
-INFO:root:Inference time: 27.895241737365723
-INFO:root:FPS: 2.1146953405017923
-ERROR:root:VideoStream ended...
-INFO:root:Model Load time: 1.3229994773864746
-INFO:root:Inference time: 27.82180690765381
-INFO:root:FPS: 2.12077641984184
-ERROR:root:VideoStream ended...
+INFO:root:FaceDetection load time: 390.613 ms
+INFO:root:FacialLandmarkDetection load time: 187.494 ms
+INFO:root:HeadPoseEstimation load time: 156.254 ms
+INFO:root:GazeEstimation load time: 203.13 ms
+INFO:root:Model Load time: 937.492 ms
+INFO:root:Inference time: 31246.719 ms
+INFO:root:FPS: 1.8881812654014785
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 359.377 ms
+INFO:root:FacialLandmarkDetection load time: 343.751 ms
+INFO:root:HeadPoseEstimation load time: 359.379 ms
+INFO:root:GazeEstimation load time: 406.248 ms
+INFO:root:Model Load time: 1468.755 ms
+INFO:root:Inference time: 31378.883 ms
+INFO:root:FPS: 1.8802383759839383
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 375.072 ms
+INFO:root:FacialLandmarkDetection load time: 718.774 ms
+INFO:root:HeadPoseEstimation load time: 437.597 ms
+INFO:root:GazeEstimation load time: 640.757 ms
+INFO:root:Model Load time: 2172.2 ms
+INFO:root:Inference time: 31501.206 ms
+INFO:root:FPS: 1.8729564140820925
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 359.373 ms
+INFO:root:FacialLandmarkDetection load time: 234.373 ms
+INFO:root:HeadPoseEstimation load time: 312.5 ms
+INFO:root:GazeEstimation load time: 375.005 ms
+INFO:root:Model Load time: 1281.251 ms
+INFO:root:Inference time: 30439.612 ms
+INFO:root:FPS: 1.938239159001314
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 343.745 ms
+INFO:root:FacialLandmarkDetection load time: 187.642 ms
+INFO:root:HeadPoseEstimation load time: 187.51 ms
+INFO:root:GazeEstimation load time: 203.12 ms
+INFO:root:Model Load time: 922.017 ms
+INFO:root:Inference time: 30897.676 ms
+INFO:root:FPS: 1.9095087060651175
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 328.239 ms
+INFO:root:FacialLandmarkDetection load time: 234.38 ms
+INFO:root:HeadPoseEstimation load time: 296.87 ms
+INFO:root:GazeEstimation load time: 359.496 ms
+INFO:root:Model Load time: 1218.985 ms
+INFO:root:Inference time: 31412.274 ms
+INFO:root:FPS: 1.878263084171654
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 359.484 ms
+INFO:root:FacialLandmarkDetection load time: 187.499 ms
+INFO:root:HeadPoseEstimation load time: 171.871 ms
+INFO:root:GazeEstimation load time: 203.127 ms
+INFO:root:Model Load time: 921.981 ms
+INFO:root:Inference time: 31400.45 ms
+INFO:root:FPS: 1.8789808917197452
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 343.751 ms
+INFO:root:FacialLandmarkDetection load time: 218.752 ms
+INFO:root:HeadPoseEstimation load time: 312.604 ms
+INFO:root:GazeEstimation load time: 359.373 ms
+INFO:root:Model Load time: 1234.481 ms
+INFO:root:Inference time: 31238.04 ms
+INFO:root:FPS: 1.8887252705038735
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 343.819 ms
+INFO:root:FacialLandmarkDetection load time: 171.876 ms
+INFO:root:HeadPoseEstimation load time: 171.869 ms
+INFO:root:GazeEstimation load time: 203.13 ms
+INFO:root:Model Load time: 890.695 ms
+INFO:root:Inference time: 31315.508 ms
+INFO:root:FPS: 1.8840209477583345
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 373.499 ms
+INFO:root:FacialLandmarkDetection load time: 201.498 ms
+INFO:root:HeadPoseEstimation load time: 187.501 ms
+INFO:root:GazeEstimation load time: 212.998 ms
+INFO:root:Model Load time: 975.496 ms
+INFO:root:Inference time: 28387.966 ms
+INFO:root:FPS: 2.078342961814851
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 399.252 ms
+INFO:root:FacialLandmarkDetection load time: 200.005 ms
+INFO:root:HeadPoseEstimation load time: 192.498 ms
+INFO:root:GazeEstimation load time: 221.996 ms
+INFO:root:Model Load time: 1013.752 ms
+INFO:root:Inference time: 28489.341 ms
+INFO:root:FPS: 2.070974762188915
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 355.8 ms
+INFO:root:FacialLandmarkDetection load time: 240.5 ms
+INFO:root:HeadPoseEstimation load time: 318.501 ms
+INFO:root:GazeEstimation load time: 390.5 ms
+INFO:root:Model Load time: 1305.301 ms
+INFO:root:Inference time: 28141.104 ms
+INFO:root:FPS: 2.09658505383604
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 383.809 ms
+INFO:root:FacialLandmarkDetection load time: 201.499 ms
+INFO:root:HeadPoseEstimation load time: 189.0 ms
+INFO:root:GazeEstimation load time: 218.001 ms
+INFO:root:Model Load time: 992.309 ms
+INFO:root:FaceDetection load time: 404.665 ms
+INFO:root:FacialLandmarkDetection load time: 205.522 ms
+INFO:root:HeadPoseEstimation load time: 180.001 ms
+INFO:root:GazeEstimation load time: 212.996 ms
+INFO:root:Model Load time: 1003.185 ms
+INFO:root:FaceDetection load time: 420.493 ms
+INFO:root:FacialLandmarkDetection load time: 211.5 ms
+INFO:root:HeadPoseEstimation load time: 183.499 ms
+INFO:root:GazeEstimation load time: 210.5 ms
+INFO:root:Model Load time: 1025.992 ms
+INFO:root:FaceDetection load time: 382.995 ms
+INFO:root:FacialLandmarkDetection load time: 202.553 ms
+INFO:root:HeadPoseEstimation load time: 178.5 ms
+INFO:root:GazeEstimation load time: 217.0 ms
+INFO:root:Model Load time: 981.048 ms
+INFO:root:FaceDetection load time: 366.003 ms
+INFO:root:FacialLandmarkDetection load time: 224.496 ms
+INFO:root:HeadPoseEstimation load time: 184.5 ms
+INFO:root:GazeEstimation load time: 217.0 ms
+INFO:root:Model Load time: 992.0 ms
+INFO:root:FaceDetection load time: 383.492 ms
+INFO:root:FacialLandmarkDetection load time: 203.498 ms
+INFO:root:HeadPoseEstimation load time: 190.502 ms
+INFO:root:GazeEstimation load time: 212.502 ms
+INFO:root:Model Load time: 989.994 ms
+INFO:root:FaceDetection load time: 411.996 ms
+INFO:root:FacialLandmarkDetection load time: 245.164 ms
+INFO:root:HeadPoseEstimation load time: 320.501 ms
+INFO:root:GazeEstimation load time: 389.999 ms
+INFO:root:Model Load time: 1367.659 ms
+INFO:root:Inference time: 28193.616 ms
+INFO:root:FPS: 2.0926438249272894
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 366.498 ms
+INFO:root:FacialLandmarkDetection load time: 250.501 ms
+INFO:root:HeadPoseEstimation load time: 317.497 ms
+INFO:root:GazeEstimation load time: 409.506 ms
+INFO:root:Model Load time: 1344.002 ms
+INFO:root:FaceDetection load time: 360.995 ms
+INFO:root:FacialLandmarkDetection load time: 229.0 ms
+INFO:root:HeadPoseEstimation load time: 302.004 ms
+INFO:root:GazeEstimation load time: 374.994 ms
+INFO:root:Model Load time: 1266.993 ms
+INFO:root:FaceDetection load time: 328.125 ms
+INFO:root:FacialLandmarkDetection load time: 249.998 ms
+INFO:root:HeadPoseEstimation load time: 296.875 ms
+INFO:root:GazeEstimation load time: 375.001 ms
+INFO:root:Model Load time: 1249.998 ms
+INFO:root:Inference time: 31669.402 ms
+INFO:root:FPS: 1.8630206195332975
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 360.997 ms
+INFO:root:FacialLandmarkDetection load time: 189.0 ms
+INFO:root:HeadPoseEstimation load time: 171.0 ms
+INFO:root:GazeEstimation load time: 202.004 ms
+INFO:root:Model Load time: 923.002 ms
+INFO:root:FaceDetection load time: 365.997 ms
+INFO:root:FacialLandmarkDetection load time: 193.001 ms
+INFO:root:HeadPoseEstimation load time: 173.998 ms
+INFO:root:GazeEstimation load time: 206.001 ms
+INFO:root:Model Load time: 938.996 ms
+INFO:root:FaceDetection load time: 373.998 ms
+INFO:root:FacialLandmarkDetection load time: 192.0 ms
+INFO:root:HeadPoseEstimation load time: 175.0 ms
+INFO:root:GazeEstimation load time: 203.001 ms
+INFO:root:Model Load time: 944.0 ms
+INFO:root:FaceDetection load time: 359.376 ms
+INFO:root:FacialLandmarkDetection load time: 218.753 ms
+INFO:root:HeadPoseEstimation load time: 312.496 ms
+INFO:root:GazeEstimation load time: 359.379 ms
+INFO:root:Model Load time: 1250.005 ms
+INFO:root:Inference time: 31471.876 ms
+INFO:root:FPS: 1.8746822572445347
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 365.996 ms
+INFO:root:FacialLandmarkDetection load time: 193.001 ms
+INFO:root:HeadPoseEstimation load time: 186.0 ms
+INFO:root:GazeEstimation load time: 214.0 ms
+INFO:root:Model Load time: 958.996 ms
+ERROR:root:Unable to detect the face. Please check once again!
+INFO:root:Inference time: 26486.848 ms
+INFO:root:FPS: 0.6795786612300374
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 371.998 ms
+INFO:root:FacialLandmarkDetection load time: 198.001 ms
+INFO:root:HeadPoseEstimation load time: 187.003 ms
+INFO:root:GazeEstimation load time: 218.996 ms
+INFO:root:Model Load time: 975.998 ms
+INFO:root:Inference time: 24060.096 ms
+INFO:root:FPS: 0.6650041562759768
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 349.815 ms
+INFO:root:FacialLandmarkDetection load time: 190.998 ms
+INFO:root:HeadPoseEstimation load time: 188.002 ms
+INFO:root:GazeEstimation load time: 213.997 ms
+INFO:root:Model Load time: 942.812 ms
+INFO:root:Inference time: 17637.939 ms
+INFO:root:FPS: 0.6803492459462523
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 328.123 ms
+INFO:root:FacialLandmarkDetection load time: 234.376 ms
+INFO:root:HeadPoseEstimation load time: 312.505 ms
+INFO:root:GazeEstimation load time: 359.476 ms
+INFO:root:Model Load time: 1234.481 ms
+INFO:root:Inference time: 31775.24 ms
+INFO:root:FPS: 1.856805664830842
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 406.252 ms
+INFO:root:FacialLandmarkDetection load time: 234.481 ms
+INFO:root:HeadPoseEstimation load time: 296.87 ms
+INFO:root:GazeEstimation load time: 359.379 ms
+INFO:root:Model Load time: 1296.982 ms
+INFO:root:Inference time: 8581.889 ms
+INFO:root:FPS: 1.8643672803542297
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 363.996 ms
+INFO:root:FacialLandmarkDetection load time: 191.005 ms
+INFO:root:HeadPoseEstimation load time: 178.997 ms
+INFO:root:GazeEstimation load time: 202.998 ms
+INFO:root:Model Load time: 936.997 ms
+INFO:root:Inference time: 49236.954 ms
+INFO:root:FPS: 0.6702276743099701
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 373.085 ms
+INFO:root:FacialLandmarkDetection load time: 194.005 ms
+INFO:root:HeadPoseEstimation load time: 174.995 ms
+INFO:root:GazeEstimation load time: 204.001 ms
+INFO:root:Model Load time: 946.086 ms
+ERROR:root:Unable to detect the face. Please check once again!
+ERROR:root:Unable to detect the face. Please check once again!
+ERROR:root:Unable to detect the face. Please check once again!
+ERROR:root:Unable to detect the face. Please check once again!
+ERROR:root:Unable to detect the face. Please check once again!
+ERROR:root:Unable to detect the face. Please check once again!
+ERROR:root:Unable to detect the face. Please check once again!
+ERROR:root:Unable to detect the face. Please check once again!
+ERROR:root:Unable to detect the face. Please check once again!
+ERROR:root:Unable to detect the face. Please check once again!
+INFO:root:Inference time: 12934.017 ms
+INFO:root:FPS: 0.7731560228854183
+ERROR:root:### VideoStream has reach to the end...
+INFO:root:FaceDetection load time: 374.997 ms
+INFO:root:FacialLandmarkDetection load time: 218.75 ms
+INFO:root:HeadPoseEstimation load time: 296.969 ms
+INFO:root:GazeEstimation load time: 375.003 ms
+INFO:root:Model Load time: 1265.721 ms
+INFO:root:Inference time: 31666.319 ms
+INFO:root:FPS: 1.863197119939367
+ERROR:root:### VideoStream has reach to the end...

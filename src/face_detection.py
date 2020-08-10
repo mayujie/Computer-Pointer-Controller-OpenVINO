@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 from openvino.inference_engine import IECore
 
-class FaceDetectionModel:
+class FaceDetection:
     '''
     Class for the Face Detection Model.
     '''
@@ -83,10 +83,10 @@ class FaceDetectionModel:
         This method is meant for running predictions on the input image.
         '''
         # 1.process the image
-        img_processed = self.preprocess_input(image.copy())
+        processed_input = self.preprocess_input(image.copy())
         # 2.Starts synchronous inference for the first infer request of the executable network and returns output data.
         # A dictionary that maps output layer names
-        outputs = self.exec_net.infer({self.input_name:img_processed})
+        outputs = self.exec_net.infer({self.input_name:processed_input})
         # print(outputs)
 
         # 3. process the outputs
@@ -127,10 +127,14 @@ class FaceDetectionModel:
         # print(image_resized)
         # - Transpose the final "channel" dimension to be first to BGR
         # - Reshape the image to add a "batch" of 1 at the start
-        img_processed = np.transpose(np.expand_dims(image_resized, axis=0), (0,3,1,2))
-        # print(img_processed) # BxCxHxW
+        # (optional)
+        # image_processed = np.transpose(np.expand_dims(image_resized, axis=0), (0,3,1,2))
+        # print(image_processed) # BxCxHxW
+        image = image_resized.transpose((2,0,1))
+        # add 1 dim at very start, then channels then H, W
+        image_processed = image.reshape(1, 3, self.input_shape[2], self.input_shape[3])
 
-        return img_processed
+        return image_processed
 
 
     def preprocess_output(self, outputs, prob_threshold):

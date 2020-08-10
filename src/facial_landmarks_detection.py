@@ -6,7 +6,8 @@ import cv2
 import numpy as np
 from openvino.inference_engine import IECore
 
-class FacialLandmarkDetectionModel:
+
+class FacialLandmarkDetection:
     '''
     Class for the Face Detection Model.
     '''
@@ -68,31 +69,31 @@ class FacialLandmarkDetectionModel:
         TODO: You will need to complete this method.
         This method is meant for running predictions on the input image.
         '''
-        img_processed = self.preprocess_input(image.copy())
-        outputs = self.exec_net.infer({self.input_name:img_processed})
+        processed_input = self.preprocess_input(image.copy())
+        outputs = self.exec_net.infer({self.input_name:processed_input})
         coords = self.preprocess_output(outputs)
         h=image.shape[0]
         w=image.shape[1]
         coords = coords* np.array([w, h, w, h])
         coords = coords.astype(np.int32) #(lefteye_x, lefteye_y, righteye_x, righteye_y)
         # left and right eyes moving range
-        le_xmin=coords[0]-10
-        le_ymin=coords[1]-10
-        le_xmax=coords[0]+10
-        le_ymax=coords[1]+10
+        leye_xmin=coords[0]-10
+        leye_ymin=coords[1]-10
+        leye_xmax=coords[0]+10
+        leye_ymax=coords[1]+10
 
-        re_xmin=coords[2]-10
-        re_ymin=coords[3]-10
-        re_xmax=coords[2]+10
-        re_ymax=coords[3]+10
-        #cv2.rectangle(image,(le_xmin,le_ymin),(le_xmax,le_ymax),(255,0,0))
-        #cv2.rectangle(image,(re_xmin,re_ymin),(re_xmax,re_ymax),(255,0,0))
+        reye_xmin=coords[2]-10
+        reye_ymin=coords[3]-10
+        reye_xmax=coords[2]+10
+        reye_ymax=coords[3]+10
+        #cv2.rectangle(image,(leye_xmin,leye_ymin),(leye_xmax,leye_ymax),(255,0,0))
+        #cv2.rectangle(image,(reye_xmin,reye_ymin),(reye_xmax,reye_ymax),(255,0,0))
         #cv2.imshow("Image",image)
-        left_eye = image[le_ymin:le_ymax, le_xmin:le_xmax]
-        right_eye = image[re_ymin:re_ymax, re_xmin:re_xmax]
-        eye_coords = [[le_xmin,le_ymin,le_xmax,le_ymax], [re_xmin,re_ymin,re_xmax,re_ymax]]
+        left_eye_box = image[leye_ymin:leye_ymax, leye_xmin:leye_xmax]
+        right_eye_box = image[reye_ymin:reye_ymax, reye_xmin:reye_xmax]
+        eye_coords = [[leye_xmin,leye_ymin,leye_xmax,leye_ymax], [reye_xmin,reye_ymin,reye_xmax,reye_ymax]]
 
-        return left_eye, right_eye, eye_coords
+        return left_eye_box, right_eye_box, eye_coords
 
 
     def check_model(self):
@@ -105,9 +106,13 @@ class FacialLandmarkDetectionModel:
         '''
         image_cvt = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image_resized = cv2.resize(image_cvt, (self.input_shape[3], self.input_shape[2]))
-        img_processed = np.transpose(np.expand_dims(image_resized, axis=0), (0,3,1,2))
+        # (optional)
+        # image_processed = np.transpose(np.expand_dims(image_resized, axis=0), (0,3,1,2))
+        image = image_resized.transpose((2,0,1))
+        # add 1 dim at very start, then channels then H, W
+        image_processed = image.reshape(1, 3, self.input_shape[2], self.input_shape[3])
 
-        return img_processed
+        return image_processed
 
 
     def preprocess_output(self, outputs):
@@ -120,5 +125,6 @@ class FacialLandmarkDetectionModel:
         leye_y = outs[1].tolist()[0][0]
         reye_x = outs[2].tolist()[0][0]
         reye_y = outs[3].tolist()[0][0]
+        coords_lr = (leye_x, leye_y, reye_x, reye_y)
 
-        return (leye_x, leye_y, reye_x, reye_y)
+        return coords_lr

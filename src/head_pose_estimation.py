@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 from openvino.inference_engine import IECore
 
-class HeadPoseEstimationModel:
+class HeadPoseEstimation:
     '''
     Class for the Face Detection Model.
     '''
@@ -66,11 +66,11 @@ class HeadPoseEstimationModel:
         TODO: You will need to complete this method.
         This method is meant for running predictions on the input image.
         '''
-        img_processed = self.preprocess_input(image.copy())
-        outputs = self.exec_net.infer({self.input_name:img_processed})
-        lastOutput = self.preprocess_output(outputs)
+        processed_input = self.preprocess_input(image.copy())
+        outputs = self.exec_net.infer({self.input_name:processed_input})
+        last_output = self.preprocess_output(outputs)
 
-        return lastOutput
+        return last_output
 
     def check_model(self):
         pass
@@ -83,16 +83,16 @@ class HeadPoseEstimationModel:
         # we wanna opposite order from H, W 
         image_resized = cv2.resize(image, (self.input_shape[3], self.input_shape[2]))
         # (optional)
-        # img_processed = np.transpose(np.expand_dims(image_resized, axis=0), (0, 3, 1, 2))
+        # image_processed = np.transpose(np.expand_dims(image_resized, axis=0), (0, 3, 1, 2))
         
         # transpose so that order has channels 1st, cuz our image after resizing still have channels last
         # 1st put the 3rd channel which is our image channels for BGR. 
         # and next is 0 and 1 which were originally our heihgt and width of the image
         image = image_resized.transpose((2,0,1))
         # add 1 dim at very start, then channels then H, W
-        img_processed = image.reshape(1, 3, self.input_shape[2], self.input_shape[3])
+        image_processed = image.reshape(1, 3, self.input_shape[2], self.input_shape[3])
 
-        return img_processed
+        return image_processed
 
     def preprocess_output(self, outputs):
         '''
