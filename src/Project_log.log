@@ -208,3 +208,53 @@ INFO:root:## Start inference on frame!
 INFO:root:Inference time: 38.381 s
 INFO:root:FPS: 1.0421823297985982
 ERROR:root:### Camera Stream or Video Stream has reach to the end...###
+INFO:root:
+Input path exists: \Intel-AI\Computer-Pointer-Controller-OpenVINO\bin\demo.mp4
+INFO:root:## Face Model path is correct: \Intel-AI\Computer-Pointer-Controller-OpenVINO\intel\face-detection-adas-binary-0001\FP32-INT1\face-detection-adas-binary-0001.xml
+INFO:root:## Landmarks Model path is correct: \Intel-AI\Computer-Pointer-Controller-OpenVINO\intel\landmarks-regression-retail-0009\FP32\landmarks-regression-retail-0009.xml
+INFO:root:## Headpose Model path is correct: \Intel-AI\Computer-Pointer-Controller-OpenVINO\intel\head-pose-estimation-adas-0001\FP32\head-pose-estimation-adas-0001.xml
+INFO:root:## Gaze Model path is correct: \Intel-AI\Computer-Pointer-Controller-OpenVINO\intel\gaze-estimation-adas-0002\FP32\gaze-estimation-adas-0002.xml
+INFO:root:## Loaded Input Feeder 
+INFO:root:FaceDetection load time: 354.305 ms
+INFO:root:FacialLandmarkDetection load time: 196.002 ms
+INFO:root:HeadPoseEstimation load time: 177.5 ms
+INFO:root:GazeEstimation load time: 212.998 ms
+INFO:root:Model Total Load time: 940.806 ms
+INFO:root:## All model successfully loaded!
+INFO:root:## Start inference on frame!
+ERROR:root:flag_return: False. Video has reachto the end...
+INFO:root:Inference time: 32.023 s
+INFO:root:FPS: 1.8424257564875244
+ERROR:root:### Camera Stream or Video Stream has reach to the end...###
+INFO:root:
+Input path exists: \Intel-AI\Computer-Pointer-Controller-OpenVINO\bin\demo.mp4
+INFO:root:## Face Model path is correct: \Intel-AI\Computer-Pointer-Controller-OpenVINO\intel\face-detection-adas-binary-0001\FP32-INT1\face-detection-adas-binary-0001.xml
+INFO:root:## Landmarks Model path is correct: \Intel-AI\Computer-Pointer-Controller-OpenVINO\intel\landmarks-regression-retail-0009\FP32\landmarks-regression-retail-0009.xml
+INFO:root:## Headpose Model path is correct: \Intel-AI\Computer-Pointer-Controller-OpenVINO\intel\head-pose-estimation-adas-0001\FP32\head-pose-estimation-adas-0001.xml
+INFO:root:## Gaze Model path is correct: \Intel-AI\Computer-Pointer-Controller-OpenVINO\intel\gaze-estimation-adas-0002\FP32\gaze-estimation-adas-0002.xml
+INFO:root:## Loaded Input Feeder 
+INFO:root:FaceDetection load time: 385.016 ms
+INFO:root:FacialLandmarkDetection load time: 204.165 ms
+INFO:root:HeadPoseEstimation load time: 265.213 ms
+INFO:root:GazeEstimation load time: 284.457 ms
+INFO:root:Model Total Load time: 1139.347 ms
+INFO:root:## All model successfully loaded!
+INFO:root:## Start inference on frame!
+ERROR:root:flag_return: False. Video has reachto the end...
+INFO:root:Inference time: 35.233 s
+INFO:root:FPS: 1.6745664575823802
+ERROR:root:### Camera Stream or Video Stream has reach to the end...###
+INFO:root:
+## You are using CAMERA right now...cam detected!
+INFO:root:## Face Model path is correct: \Intel-AI\Computer-Pointer-Controller-OpenVINO\intel\face-detection-adas-binary-0001\FP32-INT1\face-detection-adas-binary-0001.xml
+INFO:root:## Landmarks Model path is correct: \Intel-AI\Computer-Pointer-Controller-OpenVINO\intel\landmarks-regression-retail-0009\FP32\landmarks-regression-retail-0009.xml
+INFO:root:## Headpose Model path is correct: \Intel-AI\Computer-Pointer-Controller-OpenVINO\intel\head-pose-estimation-adas-0001\FP32\head-pose-estimation-adas-0001.xml
+INFO:root:## Gaze Model path is correct: \Intel-AI\Computer-Pointer-Controller-OpenVINO\intel\gaze-estimation-adas-0002\FP32\gaze-estimation-adas-0002.xml
+INFO:root:## Loaded Input Feeder 
+INFO:root:FaceDetection load time: 401.049 ms
+INFO:root:FacialLandmarkDetection load time: 229.018 ms
+INFO:root:HeadPoseEstimation load time: 511.142 ms
+INFO:root:GazeEstimation load time: 323.59 ms
+INFO:root:Model Total Load time: 1464.8 ms
+INFO:root:## All model successfully loaded!
+INFO:root:## Start inference on frame!

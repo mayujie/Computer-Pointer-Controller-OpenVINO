@@ -11,6 +11,19 @@ from head_pose_estimation import HeadPoseEstimation
 from facial_landmarks_detection import FacialLandmarkDetection
 from gaze_estimation import GazeEstimation
 
+'''
+I didn't copy the code, i used reference resources below. Tha few files of name with test, which 
+was i break down the different part and write by myself and finally combined in main.py.
+I have commented what is the result from each model in each part of code.
+And how to proceed next.
+
+Reference resources:
+https://knowledge.udacity.com/questions/254779
+https://knowledge.udacity.com/questions/171017
+https://knowledge.udacity.com/questions/257811
+https://github.com/denilDG/Computer-Pointer-Controller/blob/master/src/gaze_estimation.py
+https://github.com/Logeswaran123/Udacity_Intel_Edge_AI/tree/master/Computer_Pointer_Controller/app
+'''
 
 def main():
 	## calling argparser
@@ -235,8 +248,8 @@ def build_argparser():
 		help="Path to Input File either image or video or CAM (using camera).")
 	## parser of flags which choose way of visualization
 	parser.add_argument("-show", "--flag_visualization", required=False, nargs='+', 
-		default=[], help="Visualize the selected model on the output frame. For example, '--show fd fld hp ge' (Seperate each flag by space)"
-						 "fd: Face Detection Model,			fld: Facial Landmarks Detection Model"
+		default=[], help="Visualize the selected model on the output frame. For example, '--show fd fl hp ge' (Seperate each flag by space)"
+						 "fd: Face Detection Model,			fl: Facial Landmarks Detection Model"
 						 "hp: Head Pose Estimation Model,	ge: Gaze Estimation Model")
 	## parser of cpu_extension
 	parser.add_argument("-l", "--cpu_extension", required=False, type=str,
