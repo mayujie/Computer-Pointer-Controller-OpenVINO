@@ -20,13 +20,14 @@ class GazeEstimation:
         self.extensions = extensions
         self.model_structure = self.model_name
         self.model_weights = self.model_name.split(".")[0]+'.bin'
-        self.plugin = None
-        self.network = None
+        self.plugin = IECore()
+        ## check if read model without problem
+        self.check_model(self.model_structure, self.model_weights)
         self.exec_net = None
-        self.input_name = None
-        self.input_shape = None
-        self.output_names = None
-        self.output_shape = None
+        self.input_name = [i for i in self.network.inputs.keys()]
+        self.input_shape = self.network.inputs[self.input_name[1]].shape
+        self.output_names = [o for o in self.network.outputs.keys()]
+        
 
     def load_model(self):
         '''
@@ -34,10 +35,6 @@ class GazeEstimation:
         This method is for loading the model to the device specified by the user.
         If your model requires any Plugins, this is where you can load them.
         '''
-        self.plugin = IECore()
-        ## check if read model without problem
-        self.check_model(self.model_structure, self.model_weights)
-        
         supported_layers = self.plugin.query_network(network=self.network, device_name=self.device)
         unsupported_layers = [l for l in self.network.layers.keys() if l not in supported_layers]
 
@@ -52,7 +49,9 @@ class GazeEstimation:
                 unsupported_layers = [l for l in self.network.layers.keys() if l not in supported_layers]
                 
                 if len(unsupported_layers)!=0:
-                    print("Please try again! unsupported layers found after adding the extensions")
+                    print("Please try again! unsupported layers found after adding the extensions.  device {}:\n{}".format(self.device, ', '.join(unsupported_layers)))
+                    print("Please try to specify cpu extensions library path in sample's command line parameters using -l "
+                      "or --cpu_extension command line argument")
                     exit(1)
                 print("Problem is resolved after adding the extension!")
                 
@@ -62,11 +61,8 @@ class GazeEstimation:
                 
         self.exec_net = self.plugin.load_network(network=self.network, device_name=self.device,num_requests=1)
         
-        self.input_name = [i for i in self.network.inputs.keys()]
-        self.input_shape = self.network.inputs[self.input_name[1]].shape
-        self.output_names = [o for o in self.network.outputs.keys()]
 
-    def predict(self, left_eye_image, right_eye_image, hpa):
+    def predict(self, left_eye_image, right_eye_image, hpa, perf_flag):
         '''
         TODO: You will need to complete this method.
         This method is meant for running predictions on the input image.
@@ -76,6 +72,10 @@ class GazeEstimation:
         # print('hpa=> ',hpa) ## yaw, pitch, roll
         outputs = self.exec_net.infer({'head_pose_angles':hpa, 'left_eye_image':leye_img_processed, 'right_eye_image':reye_img_processed})
         # print(outputs) # 'gaze_vector': array([[-0.13984774, -0.38296703, -0.9055522 ]]     
+        
+        if perf_flag:
+            self.performance()
+
         new_mouse_coord, gaze_vector = self.preprocess_output(outputs,hpa)
 
         return new_mouse_coord, gaze_vector
@@ -88,6 +88,18 @@ class GazeEstimation:
             self.network = self.plugin.read_network(model=model_structure, weights=model_weights)
         except Exception as e:
             raise ValueError("Error occurred during gaze_estimation network initialization.")
+
+
+    def performance(self):
+        perf_counts = self.exec_net.requests[0].get_perf_counts()
+        # print('\n', perf_counts)
+        print("\n## Gaze estimation model performance:")
+        print("{:<70} {:<15} {:<15} {:<15} {:<10}".format('name', 'layer_type', 'exet_type', 'status', 'real_time, us'))
+
+        for layer, stats in perf_counts.items():            
+            print("{:<70} {:<15} {:<15} {:<15} {:<10}".format(layer, stats['layer_type'], stats['exec_type'], 
+                                                              stats['status'], stats['real_time']))
+
 
     def preprocess_input(self, left_eye, right_eye):
         '''

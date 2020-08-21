@@ -20,13 +20,14 @@ class FacialLandmarkDetection:
         self.extensions = extensions
         self.model_structure = self.model_name
         self.model_weights = self.model_name.split(".")[0]+'.bin'
-        self.plugin = None
-        self.network = None
+        self.plugin = IECore()
+        ## check if read model without problem
+        self.check_model(self.model_structure, self.model_weights)
         self.exec_net = None
-        self.input_name = None
-        self.input_shape = None
-        self.output_names = None
-        self.output_shape = None
+        self.input_name = next(iter(self.network.inputs))
+        self.input_shape = self.network.inputs[self.input_name].shape
+        self.output_names = next(iter(self.network.outputs))
+        self.output_shape = self.network.outputs[self.output_names].shape
 
 
     def load_model(self):
@@ -35,10 +36,6 @@ class FacialLandmarkDetection:
         This method is for loading the model to the device specified by the user.
         If your model requires any Plugins, this is where you can load them.
         '''
-        self.plugin = IECore()
-        ## check if read model without problem
-        self.check_model(self.model_structure, self.model_weights)
-
         supported_layers = self.plugin.query_network(network=self.network, device_name=self.device)
         unsupported_layers = [ul for ul in self.network.layers.keys() if ul not in supported_layers]
 
@@ -53,7 +50,9 @@ class FacialLandmarkDetection:
                 unsupported_layers = [ul for ul in self.network.layers.keys() if ul not in supported_layers]
                 
                 if len(unsupported_layers)!=0:
-                    print("Please try again! unsupported layers found after adding the extensions")
+                    print("Please try again! unsupported layers found after adding the extensions.  device {}:\n{}".format(self.device, ', '.join(unsupported_layers)))
+                    print("Please try to specify cpu extensions library path in sample's command line parameters using -l "
+                      "or --cpu_extension command line argument")
                     exit(1)
                 print("Problem is resolved after adding the extension!")
                 
@@ -63,19 +62,18 @@ class FacialLandmarkDetection:
 
         self.exec_net = self.plugin.load_network(network=self.network, device_name=self.device, num_requests=1)
 
-        self.input_name = next(iter(self.network.inputs))
-        self.input_shape = self.network.inputs[self.input_name].shape
-        self.output_names = next(iter(self.network.outputs))
-        self.output_shape = self.network.outputs[self.output_names].shape
 
-
-    def predict(self, image):
+    def predict(self, image, perf_flag):
         '''
         TODO: You will need to complete this method.
         This method is meant for running predictions on the input image.
         '''
         processed_input = self.preprocess_input(image.copy())
         outputs = self.exec_net.infer({self.input_name:processed_input})
+
+        if perf_flag:
+            self.performance()
+
         coords = self.preprocess_output(outputs)
 
         # print(image.shape)
@@ -117,6 +115,18 @@ class FacialLandmarkDetection:
             self.network = self.plugin.read_network(model=model_structure, weights=model_weights)
         except Exception as e:
             raise ValueError("Error occurred during facial_landmarks_detection network initialization.")
+
+
+    def performance(self):
+        perf_counts = self.exec_net.requests[0].get_perf_counts()
+        # print('\n', perf_counts)
+        print("\n## Facial landmarks detection model performance:")
+        print("{:<70} {:<15} {:<15} {:<15} {:<10}".format('name', 'layer_type', 'exet_type', 'status', 'real_time, us'))
+
+        for layer, stats in perf_counts.items():            
+            print("{:<70} {:<15} {:<15} {:<15} {:<10}".format(layer, stats['layer_type'], stats['exec_type'], 
+                                                              stats['status'], stats['real_time']))
+
 
     def preprocess_input(self, image):
         '''

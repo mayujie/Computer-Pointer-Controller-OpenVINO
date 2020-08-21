@@ -19,13 +19,20 @@ class FaceDetection:
         self.extensions = extensions
         self.model_structure = self.model_name # model xml file
         self.model_weights = self.model_name.split('.')[0]+'.bin' # get model binary file path just use model xml file
-        self.plugin = None
-        self.network = None
+        ## load the IE Engine API plugin (Inference Engine entity)
+        self.plugin = IECore()
+        ## check if read model without problem
+        self.check_model(self.model_structure, self.model_weights)        
         self.exec_net = None
-        self.input_name = None
-        self.input_shape = None
-        self.output_names = None
-        self.output_shape = None
+        ## Get the input layer, iterate through the inputs here
+        self.input_name = next(iter(self.network.inputs))
+        ## Return the shape of the input layer
+        self.input_shape = self.network.inputs[self.input_name].shape
+        ## Get the output layer
+        self.output_names = next(iter(self.network.outputs))
+        ## Return the shape of the output layer
+        self.output_shape = self.network.outputs[self.output_names].shape
+        
 
     def load_model(self):
         '''
@@ -33,11 +40,6 @@ class FaceDetection:
         This method is for loading the model to the device specified by the user.
         If your model requires any Plugins, this is where you can load them.
         '''
-        ## load the IE Engine API plugin (Inference Engine entity)
-        self.plugin = IECore()
-        ## check if read model without problem
-        self.check_model(self.model_structure, self.model_weights)
-
         ## Queries the plugin with specified device name what network layers are supported in the current configuration.
         ## get the supported layers of the network
         supported_layers = self.plugin.query_network(network=self.network, device_name=self.device)
@@ -57,7 +59,9 @@ class FaceDetection:
                 unsupported_layers = [ul for ul in self.network.layers.keys() if ul not in supported_layers]
                 ## if still no unsupported layer exit
                 if len(unsupported_layers)!=0:
-                    print("Please try again! unsupported layers found after adding the extensions")
+                    print("Please try again! unsupported layers found after adding the extensions.  device {}:\n{}".format(self.device, ', '.join(unsupported_layers)))
+                    print("Please try to specify cpu extensions library path in sample's command line parameters using -l "
+                      "or --cpu_extension command line argument")
                     exit(1)
                 print("Problem is resolved after adding the extension!")
             ## extensions is None exit    
@@ -68,17 +72,8 @@ class FaceDetection:
         ## load the network into the inference engine
         self.exec_net = self.plugin.load_network(network=self.network, device_name=self.device, num_requests=1)
         
-        ## Get the input layer, iterate through the inputs here
-        self.input_name = next(iter(self.network.inputs))
-        ## Return the shape of the input layer
-        self.input_shape = self.network.inputs[self.input_name].shape
-        ## Get the output layer
-        self.output_names = next(iter(self.network.outputs))
-        ## Return the shape of the output layer
-        self.output_shape = self.network.outputs[self.output_names].shape
 
-
-    def predict(self, image, prob_threshold):
+    def predict(self, image, prob_threshold, perf_flag):
         '''
         TODO: You will need to complete this method.
         This method is meant for running predictions on the input image.
@@ -89,6 +84,9 @@ class FaceDetection:
         ## A dictionary that maps output layer names
         outputs = self.exec_net.infer({self.input_name:processed_input})
         # print(outputs)
+        
+        if perf_flag:
+            self.performance()
 
         ## 3. process the outputs
         coords = self.preprocess_output(outputs, prob_threshold)
@@ -123,6 +121,17 @@ class FaceDetection:
             self.network = self.plugin.read_network(model=model_structure, weights=model_weights)
         except Exception as e:
             raise ValueError("Error occurred during face_detection network initialization.")
+
+
+    def performance(self):
+        perf_counts = self.exec_net.requests[0].get_perf_counts()
+        # print('\n', perf_counts)
+        print("## Face detection model performance:")
+        print("{:<70} {:<15} {:<15} {:<15} {:<10}".format('name', 'layer_type', 'exet_type', 'status', 'real_time, us'))
+
+        for layer, stats in perf_counts.items():            
+            print("{:<70} {:<15} {:<15} {:<15} {:<10}".format(layer, stats['layer_type'], stats['exec_type'], 
+                                                              stats['status'], stats['real_time']))
 
     def preprocess_input(self, image):
         '''
