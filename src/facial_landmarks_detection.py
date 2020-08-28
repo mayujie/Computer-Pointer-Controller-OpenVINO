@@ -30,6 +30,8 @@ class FacialLandmarkDetection:
         self.output_shape = self.network.outputs[self.output_names].shape
 
 
+## check supported layer and performence counts reference: 
+# https://gist.github.com/justinshenk/9917891c0433f33967f6e8cd8fcaa49a
     def load_model(self):
         '''
         TODO: You will need to complete this method.
@@ -37,20 +39,20 @@ class FacialLandmarkDetection:
         If your model requires any Plugins, this is where you can load them.
         '''
         supported_layers = self.plugin.query_network(network=self.network, device_name=self.device)
-        unsupported_layers = [ul for ul in self.network.layers.keys() if ul not in supported_layers]
+        layers_unsupported = [ul for ul in self.network.layers.keys() if ul not in supported_layers]
 
 
-        if len(unsupported_layers)!=0 and self.device=='CPU':
-            print("unsupported layers found: {}".format(unsupported_layers))
+        if len(layers_unsupported)!=0 and self.device=='CPU':
+            print("unsupported layers found: {}".format(layers_unsupported))
             
-            if not self.extensions==None:
+            if self.extensions!=None:
                 print("Adding cpu_extension now")
                 self.plugin.add_extension(self.extensions, self.device)
                 supported_layers = self.plugin.query_network(network=self.network, device_name=self.device)
-                unsupported_layers = [ul for ul in self.network.layers.keys() if ul not in supported_layers]
+                layers_unsupported = [ul for ul in self.network.layers.keys() if ul not in supported_layers]
                 
-                if len(unsupported_layers)!=0:
-                    print("Please try again! unsupported layers found after adding the extensions.  device {}:\n{}".format(self.device, ', '.join(unsupported_layers)))
+                if len(layers_unsupported)!=0:
+                    print("Please try again! unsupported layers found after adding the extensions.  device {}:\n{}".format(self.device, ', '.join(layers_unsupported)))
                     print("Please try to specify cpu extensions library path in sample's command line parameters using -l "
                       "or --cpu_extension command line argument")
                     exit(1)
@@ -117,6 +119,8 @@ class FacialLandmarkDetection:
             raise ValueError("Error occurred during facial_landmarks_detection network initialization.")
 
 
+## check supported layer and performence counts reference: 
+# https://gist.github.com/justinshenk/9917891c0433f33967f6e8cd8fcaa49a
     def performance(self):
         perf_counts = self.exec_net.requests[0].get_perf_counts()
         # print('\n', perf_counts)
@@ -175,12 +179,14 @@ class FacialLandmarkDetection:
 
         ## here only need left eye and right eye
         outs = outputs[self.output_names][0]
+        # print(outs.shape)
+        # print(outs[0][0][0])
         # print(outs[0].tolist()) # [[0.37333157658576965]]
         # print(outs[0].tolist()[0][0]) # [[0.37333157658576965]]        
         # print(type(outs)) # numpy.ndarry
 
-        leye_x, leye_y = outs[0].tolist()[0][0], outs[1].tolist()[0][0]
-        reye_x, reye_y = outs[2].tolist()[0][0], outs[3].tolist()[0][0]
+        leye_x, leye_y = outs[0][0][0], outs[1][0][0]
+        reye_x, reye_y = outs[2][0][0], outs[3][0][0]
         coords_lr = (leye_x, leye_y, reye_x, reye_y)
         # print(coords_lr)
 

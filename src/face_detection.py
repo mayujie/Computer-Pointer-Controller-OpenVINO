@@ -34,8 +34,10 @@ class FaceDetection:
         self.output_shape = self.network.outputs[self.output_names].shape
         
 
+## check supported layer and performence counts reference: 
+# https://gist.github.com/justinshenk/9917891c0433f33967f6e8cd8fcaa49a
     def load_model(self):
-        '''
+        '''        
         TODO: You will need to complete this method.
         This method is for loading the model to the device specified by the user.
         If your model requires any Plugins, this is where you can load them.
@@ -44,22 +46,22 @@ class FaceDetection:
         ## get the supported layers of the network
         supported_layers = self.plugin.query_network(network=self.network, device_name=self.device)
         ## check unsupported layer
-        unsupported_layers = [ul for ul in self.network.layers.keys() if ul not in supported_layers]
+        layers_unsupported = [ul for ul in self.network.layers.keys() if ul not in supported_layers]
 
         ## condition of found unsupported layer and device is CPU
-        if len(unsupported_layers)!=0 and self.device=='CPU':
-            print('unsupported layers found: {}'.format(unsupported_layers))
+        if len(layers_unsupported)!=0 and self.device=='CPU':
+            print('unsupported layers found: {}'.format(layers_unsupported))
             ## extension is not None
-            if not self.extensions==None:
+            if self.extensions!=None:
                 print("Adding cpu_extension now")
                 ## Loads extension library to the plugin with a specified device name.
                 self.plugin.add_extension(self.extensions, self.device)
                 ## update the support and unsupported layers
                 supported_layers = self.plugin.query_network(network=self.network, device_name=self.device)
-                unsupported_layers = [ul for ul in self.network.layers.keys() if ul not in supported_layers]
+                layers_unsupported = [ul for ul in self.network.layers.keys() if ul not in supported_layers]
                 ## if still no unsupported layer exit
-                if len(unsupported_layers)!=0:
-                    print("Please try again! unsupported layers found after adding the extensions.  device {}:\n{}".format(self.device, ', '.join(unsupported_layers)))
+                if len(layers_unsupported)!=0:
+                    print("Please try again! unsupported layers found after adding the extensions.  device {}:\n{}".format(self.device, ', '.join(layers_unsupported)))
                     print("Please try to specify cpu extensions library path in sample's command line parameters using -l "
                       "or --cpu_extension command line argument")
                     exit(1)
@@ -123,6 +125,8 @@ class FaceDetection:
             raise ValueError("Error occurred during face_detection network initialization.")
 
 
+## check supported layer and performence counts reference: 
+# https://gist.github.com/justinshenk/9917891c0433f33967f6e8cd8fcaa49a
     def performance(self):
         perf_counts = self.exec_net.requests[0].get_perf_counts()
         # print('\n', perf_counts)
@@ -175,8 +179,8 @@ class FaceDetection:
         outs = outputs[self.output_names][0][0] # output 
         for out in outs:
             # print(out)
-            conf = out[2]
-            if conf > prob_threshold:
+            confidence = out[2]
+            if confidence > prob_threshold:
                 x_min=out[3]
                 y_min=out[4]
                 x_max=out[5]

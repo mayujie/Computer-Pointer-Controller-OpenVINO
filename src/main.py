@@ -15,13 +15,45 @@ from gaze_estimation import GazeEstimation
 Used reference resources below. 
 I have commented what is the result from each model in each part of code. And how to proceed next.
 
-Reference resources:
+Reference resources of project:
 https://knowledge.udacity.com/questions/254779
 https://knowledge.udacity.com/questions/171017
 https://knowledge.udacity.com/questions/257811
 https://gist.github.com/justinshenk/9917891c0433f33967f6e8cd8fcaa49a
 https://docs.openvinotoolkit.org/latest/ie_python_api/classie__api_1_1InferRequest.html#details
 '''
+
+def models_handler(logger, args):
+	## put all path of model from args in to dict
+	Dict_model_path = {
+		'Face': args.face_detection_path,
+		'Landmarks': args.facial_landmarks_path,
+		'Headpose': args.head_pose_path,
+		'Gaze': args.gaze_estimation_path
+	}
+
+	## check if model exists in given path
+	for model_key in Dict_model_path.keys():
+		# print(Dict_model_path[model_key])
+		if not os.path.isfile(Dict_model_path[model_key]):
+			print("\n## " + model_key + " Model path not exists: " + Dict_model_path[model_key] + ' Please try again !!!')
+			logger.error("## " + model_key + " Model path not exists: " + Dict_model_path[model_key] + ' Please try again !!!')
+			exit(1)
+		else:
+			print('## '+model_key + " Model path is correct: " + Dict_model_path[model_key] + '\n')
+			logger.info('## '+model_key + " Model path is correct: " + Dict_model_path[model_key])
+
+	## initialize face detection mode
+	model_fd = FaceDetection(Dict_model_path['Face'], args.device, args.cpu_extension)
+	## initialize facial landmarks detection model
+	model_fld = FacialLandmarkDetection(Dict_model_path['Landmarks'], args.device, args.cpu_extension)
+	## initialize head pose estimation model
+	model_hpe = HeadPoseEstimation(Dict_model_path['Headpose'], args.device, args.cpu_extension)
+	## initialize gaze estimation model
+	model_ge = GazeEstimation(Dict_model_path['Gaze'], args.device, args.cpu_extension)
+
+	return model_fd, model_fld, model_hpe, model_ge
+
 
 def main():
 	## calling argparser
@@ -34,13 +66,6 @@ def main():
 	input_path = args.input
 	## get args visualization flags
 	visual_flags = args.flag_visualization
-	## put all path of model from args in to dict
-	Dict_model_path = {
-		'Face': args.face_detection_path,
-		'Landmarks': args.facial_landmarks_path,
-		'Headpose': args.head_pose_path,
-		'Gaze': args.gaze_estimation_path
-	}
 
 	## put all keys for visualization in dict
 	Dict_visual_keys = {
@@ -51,18 +76,6 @@ def main():
 		'args_crop': 'crop',
 		'args_win': 'win'
 	}
-
-
-	## check if model exists in given path
-	for model_key in Dict_model_path.keys():
-		print(Dict_model_path[model_key])
-		if not os.path.isfile(Dict_model_path[model_key]):
-			print("\n## " + model_key + " Model path not exists: " + Dict_model_path[model_key] + ' Please try again !!!')
-			logger.error("## " + model_key + " Model path not exists: " + Dict_model_path[model_key] + ' Please try again !!!')
-			exit(1)
-		else:
-			print('## '+model_key + " Model path is correct: " + Dict_model_path[model_key])
-			logger.info('## '+model_key + " Model path is correct: " + Dict_model_path[model_key])
 
 
 	## check if using CAMERA or video file or image
@@ -77,7 +90,7 @@ def main():
 			logger.error("## Input file not exists in Path: " + input_path + ". Please check again !!!")
 			exit(1)
 		else:
-			print('\nInput path exists: '+ input_path)
+			print('\nInput path exists: '+ input_path + '\n')
 			logger.info('\nInput path exists: '+ input_path)
 			feeder_in = InputFeeder("video", input_path)
 
@@ -85,18 +98,12 @@ def main():
 	## handler for mouse moving by precision and speed
 	mouse_handler = MouseController('medium', 'fast')
 
-	## initialize face detection mode
-	model_fd = FaceDetection(Dict_model_path['Face'], args.device, args.cpu_extension)
-	## initialize facial landmarks detection model
-	model_fld = FacialLandmarkDetection(Dict_model_path['Landmarks'], args.device, args.cpu_extension)
-	## initialize head pose estimation model
-	model_hpe = HeadPoseEstimation(Dict_model_path['Headpose'], args.device, args.cpu_extension)
-	## initialize gaze estimation model
-	model_ge = GazeEstimation(Dict_model_path['Gaze'], args.device, args.cpu_extension)
+	## initialize 4 models
+	model_fd, model_fld, model_hpe, model_ge = models_handler(logger, args)
 
 
 	feeder_in.load_data()
-	print("## Loaded Input Feeder ")
+	print("\n## Loaded Input Feeder ")
 	logger.info("## Loaded Input Feeder ")
 
 	## load face detection model
@@ -132,6 +139,7 @@ def main():
 	print("## Start inference on frame!")
 	logger.info("## Start inference on frame!")
 	
+
 	## empty list for each model to accumulate infer time and later get average infer time
 	fd_infer_time = []
 	fld_infer_time = []
@@ -150,7 +158,8 @@ def main():
 		event_key = cv2.waitKey(60)
 		## frame count add by 1
 		frame_count += 1
-		print('\nNo. frame: {}'.format(frame_count))
+		if args.show_info:
+			print('\nNo. frame: {}'.format(frame_count))
 
 		if event_key ==27:
 			print("\nUser keyboard exit!....")
@@ -164,7 +173,8 @@ def main():
 		## top left, bottom right
 		fd_infer_time.append((time.time() - t0)*1000)
 		# print(fd_infer_time)
-		print("Average inference time of FaceDetection model: {} ms".format(np.average(np.asarray(fd_infer_time))))
+		if args.show_info:
+			print("Average inference time of FaceDetection model: {} ms".format(np.average(np.asarray(fd_infer_time))))
 		
 		## if no face detected
 		if len(face_coords)==0:
@@ -181,7 +191,8 @@ def main():
 		# print(eyes_coords)
 		fld_infer_time.append((time.time()- t1)*1000)
 		# print(fld_infer_time)
-		print("Average inference time of FacialLandmarkDetection model: {} ms".format(np.average(np.asarray(fld_infer_time))))
+		if args.show_info:
+			print("Average inference time of FacialLandmarkDetection model: {} ms".format(np.average(np.asarray(fld_infer_time))))
 		
 		
 		## Head pose detection ##
@@ -190,14 +201,16 @@ def main():
 		# [6.927431583404541, -4.0265960693359375, -1.8397517204284668]
 		# print(hpe_output) # yaw, pitch, roll
 		hpe_infer_time.append((time.time() - t2)*1000)
-		print("Average inference time of HeadPoseEstimation model: {} ms".format(np.average(np.asarray(hpe_infer_time))))
+		if args.show_info:
+			print("Average inference time of HeadPoseEstimation model: {} ms".format(np.average(np.asarray(hpe_infer_time))))
 
 		## Gaze estimation ##		
 		t3 = time.time()
 		mouse_position, gaze_vector = model_ge.predict(l_eye_box, r_eye_box, hpe_output, args.perf_counts)
 		## mouse position (x, y), gaze_vector [-0.13984774, -0.38296703, -0.9055522 ]
 		ge_infer_time.append((time.time() - t3)*1000)
-		print("Average inference time of GazeEstimation model: {} ms".format(np.average(np.asarray(ge_infer_time))))
+		if args.show_info:
+			print("Average inference time of GazeEstimation model: {} ms".format(np.average(np.asarray(ge_infer_time))))
 
 		# print('@@@@@@@@@@@@@', len(visual_flags))
 				
@@ -253,9 +266,11 @@ def main():
 	total_infer_time = time.time() - start_infer_time
 	fps = frame_count / round(total_infer_time, 3)
 
-	print('Total inference time: ' + str(round(total_infer_time*1000, 3)) + ' ms')
-	print("Total frame: " + str(frame_count))
-	print('FPS: ' + str(fps))
+	# print(args.show_info)
+	if args.show_info:
+		print('Total inference time: ' + str(round(total_infer_time*1000, 3)) + ' ms')
+		print("Total frame: " + str(frame_count))
+		print('FPS: ' + str(fps))
 
 	## loggging into project log file
 	# logger.info('Total inference time: ' + str(round(total_infer_time, 3)) + ' s')	
@@ -306,6 +321,8 @@ def build_argparser():
 						 "'crop': Cropped face with Landmarks Detection,"
 						 "'hp': Head Pose Estimation Model,	'ge': Gaze Estimation Model. "						 
 						 "For example, '--show win fd fl hp ge crop' (Seperate each flag by space).")
+	parser.add_argument("-info","--show_info", required=False, default=False, action="store_true",help="Flag to show all the related information in command window. "
+						"No. of frame, Average and total infer time of each models, Total frame, FPS...")
 	## parser of cpu_extension
 	parser.add_argument("-l", "--cpu_extension", required=False, type=str,
                         default=None,

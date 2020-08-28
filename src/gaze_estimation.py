@@ -29,6 +29,8 @@ class GazeEstimation:
         self.output_names = [o for o in self.network.outputs.keys()]
         
 
+## check supported layer and performence counts reference: 
+# https://gist.github.com/justinshenk/9917891c0433f33967f6e8cd8fcaa49a
     def load_model(self):
         '''
         TODO: You will need to complete this method.
@@ -36,20 +38,20 @@ class GazeEstimation:
         If your model requires any Plugins, this is where you can load them.
         '''
         supported_layers = self.plugin.query_network(network=self.network, device_name=self.device)
-        unsupported_layers = [l for l in self.network.layers.keys() if l not in supported_layers]
+        layers_unsupported = [l for l in self.network.layers.keys() if l not in supported_layers]
 
 
-        if len(unsupported_layers)!=0 and self.device=='CPU':
-            print("unsupported layers found: {}".format(unsupported_layers))
+        if len(layers_unsupported)!=0 and self.device=='CPU':
+            print("unsupported layers found: {}".format(layers_unsupported))
 
-            if not self.extensions==None:
+            if self.extensions!=None:
                 print("Adding cpu_extension now")
                 self.plugin.add_extension(self.extensions, self.device)
                 supported_layers = self.plugin.query_network(network = self.network, device_name=self.device)
-                unsupported_layers = [l for l in self.network.layers.keys() if l not in supported_layers]
+                layers_unsupported = [l for l in self.network.layers.keys() if l not in supported_layers]
                 
-                if len(unsupported_layers)!=0:
-                    print("Please try again! unsupported layers found after adding the extensions.  device {}:\n{}".format(self.device, ', '.join(unsupported_layers)))
+                if len(layers_unsupported)!=0:
+                    print("Please try again! unsupported layers found after adding the extensions.  device {}:\n{}".format(self.device, ', '.join(layers_unsupported)))
                     print("Please try to specify cpu extensions library path in sample's command line parameters using -l "
                       "or --cpu_extension command line argument")
                     exit(1)
@@ -90,6 +92,8 @@ class GazeEstimation:
             raise ValueError("Error occurred during gaze_estimation network initialization.")
 
 
+## check supported layer and performence counts reference: 
+# https://gist.github.com/justinshenk/9917891c0433f33967f6e8cd8fcaa49a
     def performance(self):
         perf_counts = self.exec_net.requests[0].get_perf_counts()
         # print('\n', perf_counts)
@@ -145,8 +149,9 @@ class GazeEstimation:
         '''
         # print(hpa) # [y, p, r]=[6.927431583404541, -4.0265960693359375, -1.8397517204284668]
         # print(outputs) # 'gaze_vector': array([[-0.13984774, -0.38296703, -0.9055522 ]]        
-        gaze_vector = outputs[self.output_names[0]].tolist()[0]
-        # print(outputs[self.output_names[0]].tolist())
+        gaze_vector = outputs[self.output_names[0]][0]
+        # print(outputs[self.output_names[0]][0][1])
+        # print(outputs[self.output_names[0]].tolist()[0])
         # print(gaze_vector) # [-0.13984774, -0.38296703, -0.9055522 ]
         #gaze_vector = gaze_vector / cv2.norm(gaze_vector)
         ## take angle_r_fc output from Head Pose Estimation
